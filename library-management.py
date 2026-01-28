@@ -1,3 +1,16 @@
+import logging
+logger=logging.getLogger(__name__)
+
+file_handler=logging.FileHandler("logfiles.log")
+
+logger.addHandler(file_handler)
+
+formatter=logging.Formatter("%(levelname)s:%(asctime)s:%(message)s")
+
+file_handler.setFormatter(formatter)
+
+logger.setLevel(logging.INFO)
+
 class Book:
     def __init__(self, name, author, isbn):
         self.name = name
@@ -93,27 +106,34 @@ while True:
             isbn = int(input("Enter Book ISBN: "))
         except ValueError:
             print("\nISBN must be a number!\n")
+            logger.error("Error While Adding New Book")
             continue
         lib.add_book(name, author, isbn)
+        logger.info("New Book : Name={} Author={} ISBN={} Added".format(name,author,isbn))
 
     elif choice == 2:
         try:
             isbn = int(input("Enter ISBN to borrow: "))
         except ValueError:
+            logger.error("Error in ISBN")
             print("\nISBN must be a number!\n")
             continue
         lib.borrow_book(isbn)
+        logger.info("Book : ISBN={} Borrowed".format(isbn))
 
     elif choice == 3:
         try:
             isbn = int(input("Enter ISBN to return: "))
         except ValueError:
             print("\nISBN must be a number!\n")
+            logger.error("Error in ISBN")
             continue
         lib.return_book(isbn)
+        logger.info("Book : ISBN={} Returned".format(isbn))
 
     elif choice == 4:
         lib.disp_lib()
+        logger.info("All Books Verified")
 
     elif choice == 5:
         print("\nThanks for Visiting ✨\n")
@@ -121,3 +141,4 @@ while True:
 
     else:
         print("\nInvalid choice! Please try again.\n")
+        logger.error("Invalid Attempt")
